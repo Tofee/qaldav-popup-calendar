@@ -1,6 +1,7 @@
 // Copyright (C) 2021 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
+import QtCore
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Material
@@ -120,5 +121,13 @@ ApplicationWindow {
 
     WheelHandler {
         id: wheelHandler
+    }
+
+    Settings {
+        category: "Window"
+        property alias x: window.x
+        property alias y: window.y
+        property alias width: window.width
+        property alias height: window.height
     }
 }

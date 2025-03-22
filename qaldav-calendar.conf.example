@@ -1,0 +1,8 @@
+[Accounts]
+Account1 = "MyCalDAV"
+
+[MyCalDAV]
+Url = "https://caldav.example.org/dav/calendar/"
+Login = "john"
+Password = "i-am-a-password"
+
