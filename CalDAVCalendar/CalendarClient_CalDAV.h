@@ -152,27 +152,6 @@ public slots:
   void stopSynchronization(void);
   void recover(void);
 
-
-  /**
-   * @brief Saves a event to the calDAV server.
-   *
-   * If the uid parameter is empty, a new event will be created.
-   */
-  void saveEvent(QString uid,
-                 QString filename,
-                 QString summary,
-                 QString location,
-                 QString description,
-                 QString rrule,
-                 QString exdate,
-                 QDateTime startDateTime,
-                 QDateTime endDateTime);
-
-  /**
-   * @brief Deletes a specific event from the calDAV server.
-   */
-  void deleteEvent(QString href);
-
 /******************************************************************************/
 /* Protected slots                                                            */
 /******************************************************************************/
