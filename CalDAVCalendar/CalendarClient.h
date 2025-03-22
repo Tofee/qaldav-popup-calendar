@@ -27,6 +27,7 @@
 #include <QUrl>
 #include <QTextStream>
 #include <QtNetwork>
+#include <QtQml>
 
 /******************************************************************************/
 /* Own includes                                                               */
@@ -56,6 +57,9 @@
 class CalendarClient : public QObject
 {
   Q_OBJECT
+
+  QML_NAMED_ELEMENT(CalendarClient)
+  QML_UNCREATABLE("CalendarClient should not be created in QML")
 
   Q_ENUMS(E_CalendarState)
   Q_ENUMS(E_CalendarType)
@@ -109,7 +113,7 @@ public:
 /* Constructors                                                               */
 /******************************************************************************/
 public:
-  CalendarClient(QObject* parent = NULL);
+  CalendarClient(QObject* parent = nullptr);
 
 /******************************************************************************/
 /* Destructor                                                                 */
@@ -125,12 +129,12 @@ public:
   /**
    * @brief Returns a list of events which occur on the questioned date.
    */
-  Q_INVOKABLE QList<QObject*> eventsForDate(const QDate& date);
+  Q_INVOKABLE QList<CalendarEvent*> eventsForDate(const QDate& date);
 
   /**
    * @brief Returns the complete list of events this CalendarClient manages.
    */
-  Q_INVOKABLE QList<QObject*> allEvents(void);
+  Q_INVOKABLE QList<CalendarEvent*> allEvents(void);
 
 /******************************************************************************/
 /* Protected function prototypes                                                */
@@ -162,7 +166,7 @@ protected:
    * @note Single occurrence event = event without RRULE value.
    * @note Events with a RRULE value are handled within parseVEVENT()
    */
-  QList<QObject*> handleSingleEvent(CalendarEvent& evt, const QDateTime& startOfQuestionedDate, const QDateTime& endOfQuestionedDate);
+  QList<CalendarEvent*> handleSingleEvent(CalendarEvent& evt, const QDateTime& startOfQuestionedDate, const QDateTime& endOfQuestionedDate);
 
   /**
    * @brief Returns true, if a questioned date is excluded by the event EXDATE value.

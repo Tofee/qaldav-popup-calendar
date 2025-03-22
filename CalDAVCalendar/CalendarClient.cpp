@@ -84,9 +84,9 @@ CalendarClient::~CalendarClient()
 /* Public functions                                                           */
 /*****************************//*!@addtogroup pubfunct Public functions *//*@{*/
 
-QList<QObject*> CalendarClient::eventsForDate(const QDate& date)
+QList<CalendarEvent*> CalendarClient::eventsForDate(const QDate& date)
 {
-  QList<QObject*> events;
+  QList<CalendarEvent*> events;
 
   QDateTime startOfQuestionedDate(date, QTime(0,0,0));
   QDateTime endOfQuestionedDate(date, QTime(23,59,59));
@@ -738,9 +738,9 @@ QList<QObject*> CalendarClient::eventsForDate(const QDate& date)
   return events;
 }
 
-QList<QObject*> CalendarClient::allEvents(void)
+QList<CalendarEvent*> CalendarClient::allEvents(void)
 {
-  QList<QObject*> events;
+  QList<CalendarEvent*> events;
 
   foreach(CalendarEvent evt, m_EventList)
   {
@@ -775,9 +775,9 @@ void CalendarClient::setRequestTimeoutMS(const int requestTimeoutMS)
 /* Protected functions                                                        */
 /*************************//*!@addtogroup protfunct Protected functions *//*@{*/
 
-QList<QObject*> CalendarClient::handleSingleEvent(CalendarEvent& evt, const QDateTime& startOfQuestionedDate, const QDateTime& endOfQuestionedDate)
+QList<CalendarEvent*> CalendarClient::handleSingleEvent(CalendarEvent& evt, const QDateTime& startOfQuestionedDate, const QDateTime& endOfQuestionedDate)
 {
-  QList<QObject*> events;
+  QList<CalendarEvent*> events;
 
   // events must not end at 00:00:00
   if (0 == evt.getEndDateTime().time().msecsSinceStartOfDay())
