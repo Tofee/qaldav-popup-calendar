@@ -837,22 +837,29 @@ void CalendarClient::parseVEVENT(QString href)
   event.setCalendarName(m_DisplayName);
   event.setCalendarPointer(this);
   event.setHREF(href);
-  QString line;
+  QString line = m_DataStream->readLine();
   QDateTime utcTime;
-  while (!(line = m_DataStream->readLine()).contains(QByteArray("END:VEVENT")))
+  while (!line.contains(QByteArray("END:VEVENT")))
   {
     //QDEBUG << m_DisplayName << ": " << line;
 
     const int deliminatorPosition = line.indexOf(QLatin1Char(':'));
-    const QString key   = line.mid(0, deliminatorPosition);
-    QString value = (line.mid(deliminatorPosition + 1, -1).replace("\\n", "\n")); //.toLatin1();
-    QString testEncodingString = ascii2utf8(value);
-    if (false == testEncodingString.contains("�"))
-    {
-      value = testEncodingString;
-    }
+    const QString key = line.mid(0, deliminatorPosition);
+    QString value = line.mid(deliminatorPosition + 1, -1);
 
-    if (key.startsWith(QLatin1String("DTSTART")))
+    // Handle multiline values
+    while((line = m_DataStream->readLine()).startsWith(" ")) {
+        value += line.sliced(1);
+    }
+    value = value.replace("\\n", "\n");
+
+    if (key == (QLatin1String("BEGIN")) && value == "VALARM")
+    {
+        // Skip alarm description
+        while (!line.contains(QByteArray("END:VALARM")))
+            line = m_DataStream->readLine();
+    }
+    else if (key.startsWith(QLatin1String("DTSTART")))
     {
       utcTime = QDateTime::fromString(value, "yyyyMMdd'T'hhmmss'Z'");
       if (!utcTime.isValid())
