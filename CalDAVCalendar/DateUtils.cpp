@@ -17,6 +17,7 @@
 /* Library includes                                                           */
 /******************************************************************************/
 #include <QDebug>
+#include <QRegularExpression>
 
 /******************************************************************************/
 /* Own includes                                                               */
@@ -69,7 +70,7 @@ int DateUtils::getWeekdaySelectorFromString(QString weekdayString)
   int iRet = 0;
   bool bConversion = false;
 
-  weekdayString.remove(QRegExp("[MOTUWEHFRSAUmotuwehfrsau]"));
+  weekdayString.remove(QRegularExpression("[MOTUWEHFRSAUmotuwehfrsau]"));
 
   if (weekdayString.isEmpty())
   {

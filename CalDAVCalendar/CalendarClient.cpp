@@ -88,7 +88,7 @@ QList<QObject*> CalendarClient::eventsForDate(const QDate& date)
 {
   QList<QObject*> events;
 
-  QDateTime startOfQuestionedDate(date);
+  QDateTime startOfQuestionedDate(date, QTime(0,0,0));
   QDateTime endOfQuestionedDate(date, QTime(23,59,59));
 
   foreach(CalendarEvent evt, m_EventList)
@@ -117,7 +117,7 @@ QList<QObject*> CalendarClient::eventsForDate(const QDate& date)
       // is a repeated event
 
       // retrieve an array of rules
-      QStringList rruleList = evt.getRRULE().trimmed().split(";", QString::SkipEmptyParts);
+      QStringList rruleList = evt.getRRULE().trimmed().split(";", Qt::SkipEmptyParts);
 
       QString strFREQ = "";
       QString strINTERVAL = "";
@@ -134,7 +134,7 @@ QList<QObject*> CalendarClient::eventsForDate(const QDate& date)
       // divide into rule name and rule parameter(s)
       foreach(QString ruleString, rruleList)
       {
-        QStringList rruleElements = ruleString.trimmed().split("=", QString::SkipEmptyParts);
+        QStringList rruleElements = ruleString.trimmed().split("=", Qt::SkipEmptyParts);
         // result must have 2 elements
         if (rruleElements.length() != 2)
         {
@@ -320,7 +320,7 @@ QList<QObject*> CalendarClient::eventsForDate(const QDate& date)
           // repeats every nth week since start date at given weekdays
 
           // get a list of weekdays
-          QStringList listOfWeekdays = strBYDAY.toUpper().trimmed().split(",", QString::SkipEmptyParts);
+          QStringList listOfWeekdays = strBYDAY.toUpper().trimmed().split(",", Qt::SkipEmptyParts);
 
           foreach (QString weekday, listOfWeekdays)
           {
@@ -460,7 +460,7 @@ QList<QObject*> CalendarClient::eventsForDate(const QDate& date)
           // repeats every nth month since start date at given weekdays
 
           // get a list of weekdays
-          QStringList listOfWeekdays = strBYDAY.toUpper().trimmed().split(",", QString::SkipEmptyParts);
+          QStringList listOfWeekdays = strBYDAY.toUpper().trimmed().split(",", Qt::SkipEmptyParts);
 
           foreach (QString weekday, listOfWeekdays)
           {
@@ -807,7 +807,7 @@ QList<QObject*> CalendarClient::handleSingleEvent(CalendarEvent& evt, const QDat
 QString CalendarClient::encodeBase64(QString string)
 {
   QByteArray ba;
-  ba.append(string);
+  ba.append(string.toLatin1());
   return ba.toBase64();
 }
 
@@ -918,7 +918,7 @@ void CalendarClient::parseVEVENT(QString href)
 
 bool CalendarClient::isDateExcluded(const QString strExdates, const QDate& questionedDate) const
 {
-  QStringList strlstExdates = strExdates.split(",", QString::SkipEmptyParts);
+  QStringList strlstExdates = strExdates.split(",", Qt::SkipEmptyParts);
   bool bRet = false;
 
   if (strlstExdates.isEmpty())

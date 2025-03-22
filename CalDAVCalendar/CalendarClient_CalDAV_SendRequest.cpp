@@ -20,7 +20,6 @@
 #include <QDebug>
 #include <QXmlSimpleReader>
 #include <QXmlContentHandler>
-#include <QXmlQuery>
 #include <QXmlStreamNamespaceDeclaration>
 
 /******************************************************************************/
@@ -95,7 +94,7 @@ void CalendarClient_CalDAV::sendRequestSyncToken(void)
   buffer->size();
 
   QByteArray contentlength;
-  contentlength.append(QString::number(buffersize));
+  contentlength.append(QString::number(buffersize).toLatin1());
 
   QNetworkRequest request;
   request.setUrl(m_HostURL);
@@ -114,7 +113,7 @@ void CalendarClient_CalDAV::sendRequestSyncToken(void)
 
   if (NULL != m_pReply)
   {
-    connect(m_pReply, SIGNAL(error(QNetworkReply::NetworkError)),
+    connect(m_pReply, SIGNAL(errorOccurred(QNetworkReply::NetworkError)),
             this, SLOT(handleHTTPError()));
 
     connect(m_pReply, SIGNAL(finished()),
@@ -183,7 +182,7 @@ void CalendarClient_CalDAV::sendRequestChanges(void)
   buffer->size();
 
   QByteArray contentlength;
-  contentlength.append(QString::number(buffersize));
+  contentlength.append(QString::number(buffersize).toLatin1());
 
   QNetworkRequest request;
   request.setUrl(m_HostURL);
@@ -201,7 +200,7 @@ void CalendarClient_CalDAV::sendRequestChanges(void)
 
   if (NULL != m_pReply)
   {
-    connect(m_pReply, SIGNAL(error(QNetworkReply::NetworkError)),
+    connect(m_pReply, SIGNAL(errorOccurred(QNetworkReply::NetworkError)),
             this, SLOT(handleHTTPError()));
 
     connect(m_pReply, SIGNAL(finished()),
