@@ -311,7 +311,7 @@ void CalendarClient_CalDAV::handleRequestChangesFinished(void)
             {
               delete m_DataStream;
             }
-            m_DataStream = new QTextStream(elCalendarData.text().toLatin1());
+            m_DataStream = new QTextStream(elCalendarData.text().toUtf8());
 
             parseCALENDAR(sHref);
 
