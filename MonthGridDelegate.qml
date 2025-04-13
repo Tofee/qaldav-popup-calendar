@@ -20,14 +20,17 @@ ColumnLayout {
 
     required property int visibleMonth
 
+    readonly property bool isCurrentMonth: month === root.visibleMonth
+
     Material.theme: today ? Material.Dark : undefined
 
     Label {
         id: dayText
         horizontalAlignment: Text.AlignHCenter
         topPadding: 4
-        opacity: month === root.visibleMonth ? 1 : 0
         text: day
+        color: isCurrentMonth ? Material.primaryTextColor : Material.secondaryTextColor
+        font.italic: !isCurrentMonth;
 
         Layout.fillWidth: true
 
@@ -35,7 +38,7 @@ ColumnLayout {
             width: height
             height: Math.max(dayText.implicitWidth, dayText.implicitHeight)
             radius: width / 2
-            color: Material.primary
+            color: Material.accentColor
             anchors.centerIn: dayText
             anchors.verticalCenterOffset: dayText.height - dayText.baselineOffset
             z: -1
@@ -70,7 +73,7 @@ ColumnLayout {
             Material.theme: Material.Dark
 
             background: Rectangle {
-                color: itemDelegate.Material.primary
+                color: isCurrentMonth ? itemDelegate.Material.primary : itemDelegate.Material.backgroundDimColor;
                 radius: 3
             }
         }

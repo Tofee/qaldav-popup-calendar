@@ -139,12 +139,11 @@ void CalendarClient_CalDAV::sendRequestChanges(void)
 
   buffer->open(QIODevice::ReadWrite);
 
-  QString monthString = QString::number(m_Month);
-  if (monthString.length() < 2) monthString.prepend("0");
+  QDate fetchFromDate  = QDate(m_Year, m_Month-1, 15).addMonths(-1);
+  QDate fetchUntilDate = QDate(m_Year, m_Month+1, 15).addMonths(1);
 
-  QString lastDayString = QString::number(DateUtils::lastDayOfMonth(m_Year, m_Month));
-  if (lastDayString.length() < 2) lastDayString.prepend("0");
-
+  QString fetchFromDateString  = fetchFromDate.toString("yyyyMMdd");
+  QString fetchUntilDateString = fetchUntilDate.toString("yyyyMMdd");
 
   QString requestString = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\r\n"
                           "<C:calendar-query xmlns:D=\"DAV:\" xmlns:C=\"urn:ietf:params:xml:ns:caldav\">\r\n"
@@ -167,7 +166,7 @@ void CalendarClient_CalDAV::sendRequestChanges(void)
                           " <C:filter>\r\n"
                           "   <C:comp-filter name=\"VCALENDAR\">\r\n"
                           "     <C:comp-filter name=\"VEVENT\">\r\n"
-                          "       <C:time-range start=\"" + QString::number(m_Year) + monthString + "01T000000Z\" end=\"" + QString::number(m_Year) + monthString + lastDayString + "T235959Z\"/>\r\n"
+                          "       <C:time-range start=\"" + fetchFromDateString + "T000000Z\" end=\"" + fetchUntilDateString + "T235959Z\"/>\r\n"
                           "     </C:comp-filter>\r\n"
                           "   </C:comp-filter>\r\n"
                           " </C:filter>\r\n"
@@ -175,7 +174,7 @@ void CalendarClient_CalDAV::sendRequestChanges(void)
 
   //QDEBUG << m_DisplayName << ": " << "requesting:";
   //QDEBUG << m_DisplayName << ": " << requestString;
-  //QDEBUG << m_DisplayName << ": " << "<C:time-range start=\"" + QString::number(m_Year) + monthString + "01T000000Z\" end=\"" + QString::number(m_Year) + monthString + lastDayString + "T235959Z\"/>";
+  QDEBUG << m_DisplayName << ": " << "<C:time-range start=\"" + fetchFromDateString + "T000000Z\" end=\"" + fetchUntilDateString + "T235959Z\"/>";
 
   int buffersize = buffer->write(requestString.toUtf8());
   buffer->seek(0);
